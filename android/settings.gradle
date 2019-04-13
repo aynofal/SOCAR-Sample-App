@@ -1,0 +1,3 @@
+rootProject.name = 'SOCARSampleApp'
+
+include ':app'
