@@ -1,49 +1,48 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
+ * Sample app made for SOCAR Malaysia.
+ * Author: Ammar Nofal
  */
-
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import {View} from 'react-native';
+import AppNavigation from './Navigation';
+import AppContext from './Context';
+import DeviceInfo from 'react-native-device-info';
+import Realm from 'realm';
 
 type Props = {};
 export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
-  }
-}
+    constructor(props) {
+        super(props);
+        this.state = {
+            realm: null,
+            count: 0,
+        }
+    }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+    componentWillMount() {
+        Realm.open({
+            schema: [{name: 'Dog', properties: {name: 'string'}}]
+        }).then(realm => {
+            this.setState({ realm });
+        });
+    }
+
+    increaseCount = () => this.setState({count: this.state.count + 1});
+    decreaseCount = () => this.setState({count: this.state.count - 1});
+
+    render() {
+        const {Provider} = AppContext;
+        return (
+            <Provider
+                value={{
+                    count: this.state.count,
+                    increaseCount: this.increaseCount,
+                    decreaseCount: this.decreaseCount,
+                    deviceId: DeviceInfo.getDeviceId(),
+                    realm: this.state.realm,
+                }}>
+                <AppNavigation/>
+            </Provider>
+        );
+    }
+}
