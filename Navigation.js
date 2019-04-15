@@ -1,9 +1,10 @@
-import {createAppContainer, createBottomTabNavigator} from 'react-navigation';
+import {createAppContainer, createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 import SearchScreen from "./screens/SearchScreen";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import React from "react";
 import HomeScreen from "./screens/HomeScreen";
 import BookmarksScreen from "./screens/BookmarksScreen";
+import AccountDetailsScreen from "./screens/AccountDetailsScreen";
 
 const BottomTabNavigator = createBottomTabNavigator(
     {
@@ -29,4 +30,14 @@ const BottomTabNavigator = createBottomTabNavigator(
         }),
     }
 );
-export default createAppContainer(BottomTabNavigator)
+const MainStackNavigator = createStackNavigator(
+    {
+        TabNav: BottomTabNavigator,
+        AccountDetails: AccountDetailsScreen,
+    },
+    {
+        headerMode: "none",
+        initialRouteName: 'TabNav'
+    }
+);
+export default createAppContainer(MainStackNavigator)

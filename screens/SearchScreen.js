@@ -32,7 +32,9 @@ export default class SearchScreen extends Component {
 
     constructor(props) {
         super(props);
-        this.state = defaultState;
+        this.state = {
+            ...defaultState,
+        };
         this.searchTimer = null;
     }
 
@@ -79,7 +81,8 @@ export default class SearchScreen extends Component {
     };
 
     renderItem = ({item: user}) => (
-        <UserTile user={user}/>
+        <UserTile user={user}
+                  navigation={this.props.navigation}/>
     )
 
     render() {

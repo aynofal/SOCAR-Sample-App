@@ -8,7 +8,8 @@ const {width, height} = Dimensions.get('window');
 export default class BookmarksScreen extends Component{
     static contextType = AppContext;
     renderItem = ({item: user}) => (
-        <UserTile user={user}/>
+        <UserTile user={user}
+                  navigation={this.props.navigation}/>
     )
     render(){
         return (

@@ -34,10 +34,10 @@ export default class UserTile extends Component {
                     leftAvatar={{source: {uri: user.avatar_url}}}
                     bottomDivider
                     onPress={this._toggleModalVisible}
-                    rightIcon={isFavorite?{
+                    rightIcon={isFavorite ? {
                         name: 'star',
                         color: '#007afe',
-                    }:null}
+                    } : null}
                 />
                 <Modal
                     animationType="slide"
@@ -82,7 +82,6 @@ export default class UserTile extends Component {
                                     size={height * 0.08}
                                     rounded
                                     source={{uri: user.avatar_url}}
-                                    onPress={() => console.log("Works!")}
                                     containerStyle={{margin: 10}}
                                 />
                                 <Text style={styles.username}>{user.login}</Text>
@@ -104,7 +103,17 @@ export default class UserTile extends Component {
                                         </Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity style={styles.button}>
+                                <TouchableOpacity style={styles.button}
+                                                  onPress={() => {
+                                                      this.props.navigation.navigate('AccountDetails', {
+                                                          user: {
+                                                              login: user.login,
+                                                              avatar_url: user.avatar_url,
+                                                          },
+                                                          forBookmark: user,
+                                                      });
+                                                      this._toggleModalVisible();
+                                                  }}>
                                     <Text style={styles.btnTxt}>View Profile</Text>
                                 </TouchableOpacity>
                             </View>

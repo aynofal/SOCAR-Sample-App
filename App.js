@@ -3,13 +3,13 @@
  * Author: Ammar Nofal
  */
 import React, {Component} from 'react';
-import {View} from 'react-native';
 import AppNavigation from './Navigation';
 import AppContext from './Context';
 import DeviceInfo from 'react-native-device-info';
 import {BookmarkSchema} from "./models/Bookmark";
 
-const Realm = require('realm');
+const Realm = require('realm'); //Please excuse the crude use of realm, still adapting to it
+//Realm was chosen instead of firebase to reduce the user wait-time.
 
 type Props = {};
 export default class App extends Component<Props> {
