@@ -2,15 +2,21 @@ import React, {Component} from 'react';
 import {Modal, View, Text, Dimensions, TouchableOpacity, StyleSheet} from 'react-native';
 import {ListItem, Avatar} from "react-native-elements";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import AppContext from '../Context';
 
 const {width, height} = Dimensions.get('window');
 
 export default class UserTile extends Component {
+    static contextType = AppContext;
+
     constructor(props) {
         super(props);
         this.state = {
-            modalVisible: false
+            modalVisible: false,
         }
+    }
+
+    componentWillMount() {
     }
 
     _toggleModalVisible = () => {
@@ -19,6 +25,7 @@ export default class UserTile extends Component {
 
     render() {
         const user = this.props.user;
+        const isFavorite = this.context.bookmarks.map(user => user.login).includes(user.login);
         return (
             <View>
                 <ListItem
@@ -27,6 +34,10 @@ export default class UserTile extends Component {
                     leftAvatar={{source: {uri: user.avatar_url}}}
                     bottomDivider
                     onPress={this._toggleModalVisible}
+                    rightIcon={isFavorite?{
+                        name: 'star',
+                        color: '#007afe',
+                    }:null}
                 />
                 <Modal
                     animationType="slide"
@@ -45,7 +56,22 @@ export default class UserTile extends Component {
                                 flex: 1,
                                 padding: 10,
                             }}>
-                                <MaterialCommunityIcons name={'thumb-up-outline'} size={30}/>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        if (!isFavorite) {
+                                            this.context.addBookmark(user);
+                                        }
+                                        else this.context.removeBookmark(user.login);
+                                        this.context.updateLocalBookmarks();
+                                    }}>
+                                    <MaterialCommunityIcons
+                                        name={`thumb-up${
+                                            isFavorite ?
+                                                '' : '-outline'
+                                            }`}
+                                        size={30}
+                                        color={isFavorite ? '#007afe' : 'grey'}/>
+                                </TouchableOpacity>
                             </View>
                             <View style={{
                                 flex: 4,

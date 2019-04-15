@@ -7,39 +7,60 @@ import {View} from 'react-native';
 import AppNavigation from './Navigation';
 import AppContext from './Context';
 import DeviceInfo from 'react-native-device-info';
-import Realm from 'realm';
+import {BookmarkSchema} from "./models/Bookmark";
+
+const Realm = require('realm');
 
 type Props = {};
 export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            realm: null,
             count: 0,
+            realm: null,
+            bookmarks: [],
         }
     }
 
-    componentWillMount() {
-        Realm.open({
-            schema: [{name: 'Dog', properties: {name: 'string'}}]
-        }).then(realm => {
-            this.setState({ realm });
-        });
+    updateLocalBookmarks = ()=>{
+        this.setState({bookmarks: this.state.realm.objects('Bookmark')})
+    };
+
+    addBookmark = (user) => {
+        this.state.realm.write(() => {
+            this.state.realm.create('Bookmark', user);
+            this.updateLocalBookmarks();
+        })
+    };
+
+    removeBookmark = (login) => {
+        this.state.realm.write(()=>{
+            let user = this.state.realm.objects('Bookmark').filtered(`login CONTAINS '${login}'`);
+            this.state.realm.delete(user);
+        })
     }
 
-    increaseCount = () => this.setState({count: this.state.count + 1});
-    decreaseCount = () => this.setState({count: this.state.count - 1});
+    async componentWillMount() {
+        Realm.open({
+            schema: [BookmarkSchema]
+        }).then(realm => {
+            this.setState({realm}, this.updateLocalBookmarks);
+        });
+    }
 
     render() {
         const {Provider} = AppContext;
         return (
             <Provider
                 value={{
-                    count: this.state.count,
-                    increaseCount: this.increaseCount,
-                    decreaseCount: this.decreaseCount,
                     deviceId: DeviceInfo.getDeviceId(),
+                    addBookmark: this.addBookmark,
                     realm: this.state.realm,
+                    bookmarks: this.state.bookmarks,
+                    objAsArray: (obj) => Object.keys(obj).map(key=>obj[key]),
+                    databaseHasUser: this.databaseHasUser,
+                    removeBookmark: this.removeBookmark,
+                    updateLocalBookmarks: this.updateLocalBookmarks,
                 }}>
                 <AppNavigation/>
             </Provider>
