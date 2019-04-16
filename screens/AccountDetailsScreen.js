@@ -4,6 +4,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import {Avatar} from "react-native-elements";
 import User from "../api/User";
 import AppContext from '../Context';
+import {SafeAreaView} from 'react-navigation';
 
 const {width, height} = Dimensions.get('window');
 
@@ -31,7 +32,7 @@ export default class AccountDetailsScreen extends Component {
     render() {
         const isFavorite = this.context.bookmarks.map(user => user.login).includes(this.state.user.login);
         return (
-            <View style={{flex: 1}}>
+            <SafeAreaView style={{flex: 1}}>
                 <TouchableOpacity onPress={() => this.props.navigation.goBack()}
                                   style={{
                                       flexDirection: 'row',
@@ -143,7 +144,7 @@ export default class AccountDetailsScreen extends Component {
                         }
                     </View>
                 </View>
-            </View>
+            </SafeAreaView>
         );
     }
 }

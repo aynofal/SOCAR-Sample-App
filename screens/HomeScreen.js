@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, Dimensions, ActivityIndicator} from 'react-native';
 import AppContext from '../Context';
+import {SafeAreaView} from 'react-navigation';
 
 const {width, height} = Dimensions.get('window');
 
@@ -11,7 +12,7 @@ export default class HomeScreen extends Component {
         const loaded = !!this.context.realm;
         const {navigate} = this.props.navigation;
         return (
-            <View style={{
+            <SafeAreaView style={{
                 paddingHorizontal: width * 0.1,
                 flex: 1,
                 width: width,
@@ -71,7 +72,7 @@ export default class HomeScreen extends Component {
                             <ActivityIndicator/>
                         </View>
                 }
-            </View>
+            </SafeAreaView>
         )
     }
 }

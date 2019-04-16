@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, FlatList, Dimensions} from 'react-native';
 import AppContext from '../Context';
 import UserTile from "../components/UserTile";
+import {SafeAreaView} from 'react-navigation';
 
 const {width, height} = Dimensions.get('window');
 
@@ -13,14 +14,14 @@ export default class BookmarksScreen extends Component{
     )
     render(){
         return (
-            <View style={{
+            <SafeAreaView style={{
                 flex: 1,
             }}>
                 <FlatList
                     data={this.context.bookmarks}
                     keyExtractor={(item) => item.login}
                     renderItem={this.renderItem}/>
-            </View>
+            </SafeAreaView>
         )
     }
 }

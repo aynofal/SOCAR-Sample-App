@@ -5,6 +5,7 @@ import User from "../api/User";
 import SearchBar from "react-native-elements/src/searchbar/SearchBar";
 import ListItem from "react-native-elements/src/list/ListItem";
 import UserTile from "../components/UserTile";
+import {SafeAreaView} from 'react-navigation';
 
 const {width, height} = Dimensions.get('window');
 const defaultState = {
@@ -88,7 +89,7 @@ export default class SearchScreen extends Component {
     render() {
         const {search} = this.state;
         return (
-            <View style={{
+            <SafeAreaView style={{
                 alignItems: 'center',
                 flex: 1,
             }}>
@@ -175,7 +176,7 @@ export default class SearchScreen extends Component {
                             <View/>
                     }
                 </View>
-            </View>
+            </SafeAreaView>
         )
     }
 }
